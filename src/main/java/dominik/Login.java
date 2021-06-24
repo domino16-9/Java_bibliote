@@ -1,14 +1,22 @@
 package dominik;
 
 
+import dominik.model.Userinfo;
+import dominik.Register;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class Login extends JFrame {  //klasa się rozciąga
 
     public Login() {
         initComponents();
+
+
     }
 
 
@@ -17,7 +25,7 @@ public class Login extends JFrame {  //klasa się rozciąga
     private static JFrame frame;
     private static JLabel loginsuccess;
 
-    private void initComponents() {
+    private void initComponents() { //initComponents metoda do tworzenia interfejsu graficznego
 
 
         frame = new JFrame();
@@ -59,12 +67,14 @@ public class Login extends JFrame {  //klasa się rozciąga
         loginsuccess.setBounds(10, 140, 200, 20);
         panel.add(loginsuccess);
 
+
+
         frame.setVisible(true);
 
         button.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonActionPerformed(e);
+            public void actionPerformed(ActionEvent ev) {
+                buttonActionPerformed(ev);
             }
         });
         registerbutton.addActionListener((new ActionListener() {
@@ -73,14 +83,26 @@ public class Login extends JFrame {  //klasa się rozciąga
                 registerbuttonActionPerformed(e);
             }
         }));
+
     }
 
-    private void buttonActionPerformed(ActionEvent e) {
-        String user = userText.getText();
+    private void buttonActionPerformed(ActionEvent ev){
+        File file = new File("user.txt"); //odczyt  z pliku
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {  // Dodawanie wyjątku FileNotFoundException wymagane do działania scannera
+            e.printStackTrace();
+        }
+        String login = scanner.nextLine();
+        String haslo = scanner.nextLine();
+
+
+        String user = userText.getText(); // porównanie hasła i loginu
         String password = passwordText.getText();
-        if (user.equals("admin") && password.equals("admin")) {
+        if (user.equals(login) && password.equals(haslo)) {
             // loginsuccess.setText("udało ci się zalogować");
-            new Register(this).setVisible(true);
+            new Main(this).setVisible(true);
             frame.setVisible(false);
         } else {
             loginsuccess.setText("błędny login lub hasło");
@@ -91,4 +113,5 @@ public class Login extends JFrame {  //klasa się rozciąga
     private void registerbuttonActionPerformed(ActionEvent e) {
         new Register(this).setVisible(true);
     }
+
 }

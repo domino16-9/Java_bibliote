@@ -1,7 +1,11 @@
 package dominik;
+import dominik.model.Userinfo;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 
 public class Register extends JFrame{
@@ -98,14 +102,14 @@ public class Register extends JFrame{
 
         button.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonActionPerformed(e);
+            public void actionPerformed(ActionEvent ev) {
+                buttonActionPerformed(ev);
             }
         });
 
     }
 
-    private void buttonActionPerformed(ActionEvent e){
+    private void buttonActionPerformed(ActionEvent ev){
         String firstname = firstnameText.getText();
         String secondname = secondnameText.getText();
         String username = usernametext.getText();
@@ -114,6 +118,18 @@ public class Register extends JFrame{
         String repassword = repasswordText.getText();
         if (repassword.equals(password)){
             registersuccess.setText("możesz się teraz zalogować");
+            PrintWriter zapis = null;     //zapis do pliku
+            try {
+                zapis = new PrintWriter("user.txt");
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
+            zapis.println(username);
+            zapis.println(password);
+            zapis.close();
+
+            JOptionPane.showMessageDialog(null, "Teraz możesz się zalogować");
+                frame.setVisible(false);;
 
 
 
@@ -123,4 +139,8 @@ public class Register extends JFrame{
             registersuccess.setText("spróbuj jeszcze raz");
         }
 
-    }}
+    }
+   // Userinfo userinfo= new Userinfo("sdos","nsdn","knfnas","nksn","nfsfdk");
+   // registersuccess.setText(userinfo);
+
+}
